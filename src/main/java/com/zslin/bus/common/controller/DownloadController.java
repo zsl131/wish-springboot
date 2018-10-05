@@ -40,7 +40,7 @@ public class DownloadController {
             if("1".equals(from)) {
                 file = ResourceUtils.getFile("classpath:public/" + filename);
             } else {
-                file = new File(configTools.getUploadPath(filename));
+                file = new File(configTools.getUploadPath(filename, false));
             }
             bis = new BufferedInputStream(new FileInputStream(file));
             int i = bis.read(buff);

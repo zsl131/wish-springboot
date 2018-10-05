@@ -28,7 +28,7 @@ public class UploadController {
     private ConfigTools configTools;
 
     private static final String PATH_PRE = "/wangeditor/images";
-    private static final String UPLOAD_PATH_PRE = "/publicFile/upload";
+    private static final String UPLOAD_PATH_PRE = "/upload";
 
     @RequestMapping(value="image")
     public UploadResult add(HttpServletRequest request, @RequestParam("files") MultipartFile[] files) {
@@ -43,8 +43,8 @@ public class UploadController {
                     String fileName = file.getOriginalFilename();
 //                    System.out.println("========fileName::"+fileName);
                     if (fileName != null && !"".equalsIgnoreCase(fileName.trim()) && NormalTools.isImageFile(fileName)) {
-                        File outFile = new File(configTools.getUploadPath(PATH_PRE) + File.separator + NormalTools.curDate("yyyyMMdd") + File.separator + UUID.randomUUID().toString() + NormalTools.getFileType(fileName));
-                        String uploadPath = outFile.getAbsolutePath().replace(configTools.getUploadPath(), File.separator);
+                        File outFile = new File(configTools.getUploadPath(PATH_PRE, false) + File.separator + NormalTools.curDate("yyyyMMdd") + File.separator + UUID.randomUUID().toString() + NormalTools.getFileType(fileName));
+                        String uploadPath = outFile.getAbsolutePath().replace(configTools.getUploadPath(false), File.separator);
                         FileUtils.copyInputStreamToFile(file.getInputStream(), outFile);
                         result.add(uploadPath);
                     }
@@ -81,8 +81,8 @@ public class UploadController {
             MultipartFile file = multipartFile[0];
             String fileName = file.getOriginalFilename();
             if (fileName != null && !"".equalsIgnoreCase(fileName.trim()) && NormalTools.isImageFile(fileName)) {
-                File outFile = new File(configTools.getUploadPath(UPLOAD_PATH_PRE) + File.separator + NormalTools.curDate("yyyyMMdd") + File.separator + UUID.randomUUID().toString() + NormalTools.getFileType(fileName));
-                result = outFile.getAbsolutePath().replace(configTools.getUploadPath(), File.separator);
+                File outFile = new File(configTools.getUploadPath(UPLOAD_PATH_PRE, true) + File.separator + NormalTools.curDate("yyyyMMdd") + File.separator + UUID.randomUUID().toString() + NormalTools.getFileType(fileName));
+                result = outFile.getAbsolutePath().replace(configTools.getUploadPath(false), File.separator);
                 FileUtils.copyInputStreamToFile(file.getInputStream(), outFile);
 //                result.add(uploadPath);
             }

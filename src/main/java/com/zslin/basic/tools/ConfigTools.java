@@ -16,6 +16,8 @@ public class ConfigTools { // extends WebMvcConfigurerAdapter
     @Value("${web.upload-path}")
     private String uploadPath;
 
+    public static final String PUBLIC_PATH = "publicFile"+File.separator;
+
     /** 项目名称 */
     @Value("${spring.application.name}")
     private String name;
@@ -28,14 +30,22 @@ public class ConfigTools { // extends WebMvcConfigurerAdapter
         this.name = name;
     }
 
-    public String getUploadPath() {
+    private String getUploadPath() {
         return getUploadPath("");
     }
 
-    public String getUploadPath(String basePath) {
+    private String getUploadPath(String basePath) {
         File f = new File(uploadPath+basePath);
         if(!f.exists()) {f.mkdirs();}
         return f.getAbsolutePath()+File.separator;
+    }
+
+    public String getUploadPath(String basePath, boolean isPublic) {
+        return getUploadPath((isPublic?PUBLIC_PATH:"")+basePath);
+    }
+
+    public String getUploadPath(boolean isPublic) {
+        return getUploadPath(isPublic?PUBLIC_PATH:"");
     }
 
     public void setUploadPath(String uploadPath) {

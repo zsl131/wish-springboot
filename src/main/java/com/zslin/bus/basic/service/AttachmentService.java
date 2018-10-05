@@ -43,7 +43,7 @@ public class AttachmentService {
             Integer id = Integer.parseInt(JsonTools.getJsonParam(params, "id"));
 //            String fieldName = JsonTools.getJsonParam(params, "fieldName");
             Attachment a = attachmentDao.findOne(id);
-            File file = new File(configTools.getUploadPath() + a.getUrl());
+            File file = new File(configTools.getUploadPath(false) + a.getUrl());
             if(file!=null && file.exists()) {
                 file.delete();
             }
@@ -67,7 +67,7 @@ public class AttachmentService {
                 if(idStr!=null && !"".equals(idStr)) {
                     Integer id = Integer.parseInt(idStr.trim());
                     Attachment a = attachmentDao.findOne(id);
-                    File file = new File(configTools.getUploadPath() + a.getUrl());
+                    File file = new File(configTools.getUploadPath(false) + a.getUrl());
                     if(file!=null && file.exists()) {
                         file.delete();
                     }

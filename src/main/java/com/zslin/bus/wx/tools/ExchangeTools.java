@@ -97,6 +97,22 @@ public class ExchangeTools {
         return res;
     }
 
+    /** 保存微信头像 */
+    public String saveHeadImg(String path, String imgUrl) {
+        String res = "";
+        try {
+            URL url = new URL(imgUrl);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setReadTimeout(5000);
+            conn.connect();
+            saveFile(conn.getInputStream(), path);
+            res = path;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return res;
+    }
+
     private String getFileType(String str) {
         str = str.replace("\"", "");
         return str.substring(str.lastIndexOf("."));

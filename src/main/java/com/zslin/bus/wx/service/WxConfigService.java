@@ -3,6 +3,7 @@ package com.zslin.bus.wx.service;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.zslin.basic.annotations.AdminAuth;
+import com.zslin.basic.tools.MyBeanUtils;
 import com.zslin.bus.tools.JsonResult;
 import com.zslin.bus.wx.dao.IWxConfigDao;
 import com.zslin.bus.wx.model.WxConfig;
@@ -27,7 +28,13 @@ public class WxConfigService {
 
     public JsonResult save(String params) {
         WxConfig wc = JSONObject.toJavaObject(JSON.parseObject(params), WxConfig.class);
-        wxConfigDao.save(wc);
+        WxConfig cfg = wxConfigDao.loadOne();
+        if(cfg==null) {
+            wxConfigDao.save(wc);
+        } else {
+            MyBeanUtils.copyProperties(wc, cfg, "id");
+            wxConfigDao.save(cfg);
+        }
         return JsonResult.succ(wc);
     }
 }

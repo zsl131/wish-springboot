@@ -18,6 +18,7 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
 import java.util.List;
 import java.util.UUID;
 
@@ -117,7 +118,7 @@ public class DatasTools {
         f.setType("image");
         f.setPicUrl(picPath);
         f.setMediaId(mediaId);
-        f.setFilePath(exchangeTools.saveMedia(mediaId, configTools.getUploadPath("feedback/")+ UUID.randomUUID().toString()).replace(configTools.getUploadPath(), "\\"));
+        f.setFilePath(exchangeTools.saveMedia(mediaId, configTools.getUploadPath("feedback/", true)+ UUID.randomUUID().toString()).replace(configTools.getUploadPath(false), "\\"));
         WxAccount a = wxAccountDao.findByOpenid(openid);
         if(a!=null) {
             f.setAccountId(a.getId());
@@ -156,7 +157,10 @@ public class DatasTools {
                     nickname = nickname.replaceAll("[^\\u0000-\\uFFFF]", ""); //替换utf8mb4字条
                 } catch (Exception e) {
                 }
-                a.setAvatarUrl(jsonObj.getString("headimgurl"));
+                String imgUrl = jsonObj.getString("headimgurl");
+
+                a.setAvatarUrl(exchangeTools.saveHeadImg((a.getAvatarUrl()==null||"".equals(a.getAvatarUrl()))?configTools.getUploadPath("headimg/",true)+ UUID.randomUUID().toString()+".jpg":configTools.getUploadPath(false)+a.getAvatarUrl().substring(1), imgUrl).replace(configTools.getUploadPath(false), File.separator));
+                System.out.printf(a.getAvatarUrl()+"=="+configTools.getUploadPath(false)+a.getAvatarUrl());
                 a.setNickname(nickname);
                 a.setOpenid(openid);
                 a.setSex(jsonObj.getInt("sex")+"");
@@ -185,7 +189,10 @@ public class DatasTools {
                     nickname = nickname.replaceAll("[^\\u0000-\\uFFFF]", ""); //替换utf8mb4字符
                 } catch (Exception e) {
                 }
-                a.setAvatarUrl(jsonObj.getString("headimgurl"));
+//                a.setAvatarUrl(jsonObj.getString("headimgurl"));
+                String imgUrl = jsonObj.getString("headimgurl");
+
+                a.setAvatarUrl(exchangeTools.saveHeadImg((a.getAvatarUrl()==null||"".equals(a.getAvatarUrl()))?configTools.getUploadPath("headimg/",true)+ UUID.randomUUID().toString()+".jpg":configTools.getUploadPath(false)+a.getAvatarUrl().substring(1), imgUrl).replace(configTools.getUploadPath(false), File.separator));
                 a.setNickname(nickname);
                 a.setSex(jsonObj.getInt("sex")+"");
             }

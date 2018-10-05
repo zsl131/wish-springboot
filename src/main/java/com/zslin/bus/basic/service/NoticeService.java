@@ -105,7 +105,7 @@ public class NoticeService {
                 Notice d = noticeDao.findOne(obj.getId());
                 if(d.getPicPath()!=null && !d.getPicPath().equals(obj.getPicPath())) {
                     //删除原来的图片
-                    File file = new File(configTools.getUploadPath() + d.getPicPath());
+                    File file = new File(configTools.getUploadPath(false) + d.getPicPath());
                     if(file.exists()) {file.delete();}
                 }
                 MyBeanUtils.copyProperties(obj, d, "id");
